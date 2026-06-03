@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise for You</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --primary-hover: #ff758f;
+            --bg-dark: #0f0c1b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #fff0f5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c1b 0%, #201335 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- LOCK SCREEN --- */
+        #lock-screen {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 90%;
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #lock-screen h2 {
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        #lock-screen p {
+            font-size: 0.9rem;
+            color: #ccb7e3;
+            margin-bottom: 1.5rem;
+        }
+
+        #password-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+
+        #password-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+        }
+
+        #unlock-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        #unlock-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.6);
+        }
+
+        #error-msg {
+            color: #ff758f;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* --- MAIN CONTENT --- */
+        #main-content {
+            display: none;
+            max-width: 700px;
+            width: 90%;
+            margin: 2rem auto;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
+        }
+
+        .subtitle {
+            font-style: italic;
+            color: #ccb7e3;
+        }
+
+        .letter-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .letter-box p {
+            margin-bottom: 1.5rem;
+        }
+
+        h2.section-title {
+            color: var(--primary);
+            margin: 2rem 0 1rem 0;
+            font-size: 1.4rem;
+            border-bottom: 1px solid rgba(255, 77, 109, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .memory-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .memory-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .sign-off {
+            text-align: right;
+            margin-top: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* --- FLOATING HEARTS --- */
+        .heart {
+            position: fixed;
+            bottom: -10vh;
+            font-size: 1.5rem;
+            color: rgba(255, 77, 109, 0.6);
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: float Up 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Lock Screen Panel -->
+    <div id="lock-screen">
+        <span class="lock-icon">🔒</span>
+        <h2>Access Restricted</h2>
+        <p>Hint: The nickname that belongs only to you, spoken only by me.</p>
+        <input type="password" id="password-input" placeholder="Enter Secret Code...">
+        <button id="unlock-btn" onclick="checkPassword()">Unlock Memories</button>
+        <p id="error-msg">Incorrect nickname. Try again, my love! ❤️</p>
+    </div>
+
+    <!-- Main Surprise Content -->
+    <div id="main-content">
+        <div class="header-section">
+            <h1>Happy Birthday, My Future Wife ❤️</h1>
+            <p class="subtitle">A private corner built just for us.</p>
+        </div>
+
+        <div class="letter-box">
+            <p>Monu,</p>
+            <p>If you are reading this, it means you figured out the code. But then again, you always know exactly how to get straight to my heart.</p>
+            <p>Today is the most special day of the year because it’s the day the person who changed my entire world was born. Since I can't wrap up the universe and give it to you, I wanted to build this private space just for us. A place to look back at where we’ve been, and look forward to where we are going.</p>
+            
+            <h2 class="section-title">✨ Chapter 1: The Moments That Made Us</h2>
+            
+            <div class="memory-card">
+                <h3>🕒 Where It All Began</h3>
+                <p>Do you remember when we first started truly talking? I look back at those early days and smile at how clueless I was that I was actually talking to my absolute future. Every text, every late-night laugh, and every quiet moment was quietly laying the foundation for the rest of our lives. You captured my attention then, but you hold my heart now.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🍔 Inside Jokes & Simple Days</h3>
+                <p>Some of my absolute favorite memories with you aren't even the massive milestones—it’s the simple things. The late-night cravings we talked about, the fast-food runs, the random photos we send each other just to share our day, and the way you can make me laugh like nobody else on this planet. With you, even a completely ordinary day becomes an adventure I never want to end.</p>
+            </div>
+
+            <h2 class="section-title">💪 Chapter 2: Side by Side Through Everything</h2>
+            <p>What we have isn't just a fairytale; it's real. We’ve had our long talks, we've faced our challenges, and we’ve grown closer through every single one of them. Seeing your strength, your kindness, and the way you care for me has shown me what true love really looks like. You are my peace at the end of a long day.</p>
+
+            <h2 class="section-title">💍 Chapter 3: To My Future Wife</h2>
+            <p>Monu, as you step into this new year of your life, I want to make a few promises to you.</p>
+            <p>I promise to stand by you through every high and every low. I promise to keep making you laugh, to protect your smile, and to never take for granted the incredible woman you are. I don't just see you as my girlfriend today; I look at you and see the woman I am going to build a home with, travel the world with, and marry.</p>
+            <p>Thank you for being my partner, my best friend, and my ultimate dream come true.</p>
+            <p>May this year bring you endless happiness, blessings, and success. I love you more than words can put together.</p>
+            
+            <p class="sign-off">Happy Birthday, Monu.<br>Always and forever, Yours. ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // Check password function
+        function checkPassword() {
+            const input = document.getElementById('password-input').value.trim();
+            const lockScreen = document.getElementById('lock-screen');
+            const mainContent = document.getElementById('main-content');
+            const errorMsg = document.getElementById('error-msg');
+
+            // Case-insensitive password check for "Monu"
+            if (input.toLowerCase() === 'monu') {
+                lockScreen.style.opacity = '0';
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    document.body.style.overflowY = 'auto';
+                    // Trigger floating hearts
+                    setInterval(createHeart, 300);
+                    setTimeout(() => {
+                        mainContent.style.opacity = '1';
+                    }, 50);
+                }, 500);
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // Allow pressing 'Enter' key to unlock
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Floating Hearts Background Effect
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 3 + 's'; // 3 to 6 seconds
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px'; // 15px to 30px
+            document.body.appendChild(heart);
+
+            // Remove heart after animation ends
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
